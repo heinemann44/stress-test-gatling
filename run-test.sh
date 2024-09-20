@@ -4,7 +4,7 @@
 # curl -v -XGET "http://localhost:9999/pessoas?t=xpto"
 # curl -v "http://localhost:9999/contagem-pessoas"
 
-GATLING_BIN_DIR=$HOME/deps/gatling/bin
+GATLING_BIN_DIR=$HOME/ferramentas/gatling-charts-highcharts-bundle-3.9.5/bin
 
 WORKSPACE=$HOME/workspace/stress-test-gatling
 
@@ -16,4 +16,4 @@ sh $GATLING_BIN_DIR/gatling.sh -rm local -s BackendSimulation \
 
 sleep 3
 
-curl -v "http://localhost:9999/contagem-pessoas"
+# curl -v "http://localhost:9999/contagem-pessoas"
