@@ -10,7 +10,7 @@ class BackendSimulation
   extends Simulation {
 
   val httpProtocol = http
-    .baseUrl("http://localhost:9999")
+    .baseUrl("http://localhost:8080")
 
   def criacaoEConsultaPessoas(tenantId: String) = {
     scenario(tenantId +  " Criação E Talvez Consulta de Pessoas")
@@ -19,7 +19,7 @@ class BackendSimulation
         http("criação")
           .post("/pessoas").body(StringBody("#{payload}"))
           .header("content-type", "application/json")
-          .header("tenant-id", tenantId)
+          .header("x-tenant", tenantId)
           .check(status.in(201, 422, 400))
           .check(status.saveAs("httpStatus"))
           .checkIf(session => session("httpStatus").as[String] == "201") {
@@ -31,7 +31,7 @@ class BackendSimulation
         exec(
           http("consulta")
             .get("#{location}")
-            .header("tenant-id", tenantId)
+            .header("x-tenant", tenantId)
         )
       }
   }
@@ -42,7 +42,7 @@ class BackendSimulation
       .exec(
         http("busca válida")
           .get("/pessoas?t=#{t}")
-          .header("tenant-id", tenantId)
+          .header("x-tenant", tenantId)
           // qq resposta na faixa 2XX tá safe
       )
   }
@@ -52,7 +52,7 @@ class BackendSimulation
       .exec(
         http("busca inválida")
           .get("/pessoas")
-          .header("tenant-id", tenantId)
+          .header("x-tenant", tenantId)
           // 400 - bad request se não passar 't' como query string
         .check(status.is(400))
       )
